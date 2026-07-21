@@ -1,0 +1,14 @@
+/vendor/
+/node_modules/
+/public/build/
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/logs/
+.env
+.git/
+.gitignore
+*.md
+Dockerfile
+.dockerignore
+phpunit.xml

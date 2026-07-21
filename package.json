@@ -1,0 +1,21 @@
+{
+  "name": "university-talent-hub",
+  "private": true,
+  "description": "University Talent Hub - Monorepo root",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c \"#22c55e,#3b82f6\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend/nestjs && npm run start:dev",
+    "dev:frontend": "cd frontend/laravel && composer run dev:server",
+    "build": "concurrently -n backend,frontend \"npm run build:backend\" \"npm run build:frontend\"",
+    "build:backend": "cd backend/nestjs && npm run build",
+    "build:frontend": "cd frontend/laravel && npm run build",
+    "test": "concurrently -n backend,frontend \"npm run test:backend\" \"npm run test:frontend\"",
+    "test:backend": "cd backend/nestjs && npm test",
+    "test:frontend": "cd frontend/laravel && composer run test",
+    "install:all": "cd backend/nestjs && npm install && cd ../../frontend/laravel && npm install && composer install",
+    "setup": "cd frontend/laravel && composer run setup"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
