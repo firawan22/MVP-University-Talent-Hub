@@ -42,6 +42,12 @@ try {
     $_SERVER['HTTPS'] = 'on';
     $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
 
+    if ($apiBaseUrl = (getenv('API_BASE_URL') ?: ($_ENV['API_BASE_URL'] ?? null))) {
+        putenv('API_BASE_URL=' . $apiBaseUrl);
+        $_ENV['API_BASE_URL'] = $apiBaseUrl;
+        $_SERVER['API_BASE_URL'] = $apiBaseUrl;
+    }
+
     // Bridge Vercel serverless request to Laravel's public/index.php
     require __DIR__ . '/../public/index.php';
 
