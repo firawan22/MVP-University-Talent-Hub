@@ -22,11 +22,14 @@ Route::post('/login', function (Request $request) {
         }
 
         $json = $response->json();
-        $errorMsg = is_array($json['message'] ?? null) ? implode(', ', $json['message']) : ($json['message'] ?? $json['error'] ?? 'Invalid credentials.');
+        $status = $response->status();
+        $errorMsg = is_array($json['message'] ?? null) 
+            ? implode(', ', $json['message']) 
+            : ($json['message'] ?? $json['error'] ?? ($response->body() ? "API Error ($status): " . substr(strip_tags($response->body()), 0, 100) : "Login failed ($status)."));
         return back()->withErrors(['login' => $errorMsg])->withInput();
     } catch (\Throwable $e) {
         $apiHost = config('services.api_base_url');
-        return back()->withErrors(['login' => "Backend API server ($apiHost) is unreachable. Please ensure NestJS backend is running."])->withInput();
+        return back()->withErrors(['login' => "Backend API server ($apiHost) is unreachable: " . $e->getMessage()])->withInput();
     }
 })->name('login.submit');
 
@@ -49,11 +52,14 @@ Route::post('/register', function (Request $request) {
         }
 
         $json = $response->json();
-        $errorMsg = is_array($json['message'] ?? null) ? implode(', ', $json['message']) : ($json['message'] ?? $json['error'] ?? 'Registration failed.');
+        $status = $response->status();
+        $errorMsg = is_array($json['message'] ?? null) 
+            ? implode(', ', $json['message']) 
+            : ($json['message'] ?? $json['error'] ?? ($response->body() ? "API Error ($status): " . substr(strip_tags($response->body()), 0, 100) : "Registration failed ($status)."));
         return back()->withErrors(['register' => $errorMsg])->withInput();
     } catch (\Throwable $e) {
         $apiHost = config('services.api_base_url');
-        return back()->withErrors(['register' => "Backend API server ($apiHost) is unreachable. Please ensure NestJS backend is running."])->withInput();
+        return back()->withErrors(['register' => "Backend API server ($apiHost) is unreachable: " . $e->getMessage()])->withInput();
     }
 })->name('register.submit');
 
