@@ -9,18 +9,23 @@ Route::get('/', function () {
 });
 
 Route::post('/login', function (Request $request) {
-    $response = Http::post(config('services.api_base_url') . '/auth/login', [
-        'email' => $request->input('email'),
-        'password' => $request->input('password'),
-    ]);
+    try {
+        $response = Http::post(config('services.api_base_url') . '/auth/login', [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ]);
 
-    if ($response->successful() && isset($response->json()['token'])) {
-        // persist token and user in session
-        session(['token' => $response->json()['token'], 'user' => $response->json()['user']]);
-        return redirect('/dashboard');
+        if ($response->successful() && isset($response->json()['token'])) {
+            // persist token and user in session
+            session(['token' => $response->json()['token'], 'user' => $response->json()['user']]);
+            return redirect('/dashboard');
+        }
+
+        $errorMsg = $response->json()['message'] ?? $response->json()['error'] ?? 'Invalid credentials.';
+        return back()->withErrors(['login' => $errorMsg])->withInput();
+    } catch (\Throwable $e) {
+        return back()->withErrors(['login' => 'Backend API server (http://localhost:3001) is unreachable. Please ensure NestJS and MySQL are running.'])->withInput();
     }
-
-    return back()->withErrors(['login' => 'Invalid credentials.'])->withInput();
 })->name('login.submit');
 
 Route::get('/register', function () {
@@ -28,23 +33,27 @@ Route::get('/register', function () {
 })->name('register');
 
 Route::post('/register', function (Request $request) {
-    $response = Http::post(config('services.api_base_url') . '/auth/register', [
-        'name' => $request->input('name'),
-        'email' => $request->input('email'),
-        'password' => $request->input('password'),
-        'role' => 'student',
-    ]);
+    try {
+        $response = Http::post(config('services.api_base_url') . '/auth/register', [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'role' => 'student',
+        ]);
 
-    if ($response->successful() && isset($response->json()['token'])) {
-        session(['token' => $response->json()['token'], 'user' => $response->json()['user']]);
-        return redirect('/dashboard');
+        if ($response->successful() && isset($response->json()['token'])) {
+            session(['token' => $response->json()['token'], 'user' => $response->json()['user']]);
+            return redirect('/dashboard');
+        }
+
+        $errorMsg = $response->json()['message'] ?? $response->json()['error'] ?? 'Registration failed.';
+        return back()->withErrors(['register' => $errorMsg])->withInput();
+    } catch (\Throwable $e) {
+        return back()->withErrors(['register' => 'Backend API server (http://localhost:3001) is unreachable. Please ensure NestJS and MySQL are running.'])->withInput();
     }
-
-    $errorMsg = $response->json()['error'] ?? 'Registration failed.';
-    return back()->withErrors(['register' => $errorMsg])->withInput();
 })->name('register.submit');
 
-Route::post('/logout', function (Request $request) {
+Route::match(['get', 'post'], '/logout', function (Request $request) {
     $request->session()->flush();
     return redirect('/');
 })->name('logout');

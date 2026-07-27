@@ -68,6 +68,17 @@
                     <span class="text-sm font-medium text-indigo-700 hidden sm:inline">{{ $user['name'] ?? 'User' }}</span>
                 </div>
 
+                <!-- Desktop Logout Button -->
+                <form method="POST" action="{{ route('logout') }}" class="hidden md:block">
+                    @csrf
+                    <button type="submit" title="Logout" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 hover:text-rose-700 border border-rose-200/80 hover:border-rose-300 transition-all duration-200 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
                 <!-- Mobile menu toggle -->
                 <details class="md:hidden relative">
                     <summary class="flex items-center gap-1 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer list-none">

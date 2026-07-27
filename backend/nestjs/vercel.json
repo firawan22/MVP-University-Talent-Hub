@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "buildCommand": "echo 'Building Vercel Serverless Function'",
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.ts"
+    }
+  ]
+}
