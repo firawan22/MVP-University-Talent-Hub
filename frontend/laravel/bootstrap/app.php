@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Support\Facades\URL;
 
 $app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,7 +20,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
 if (isset($_ENV['VIEW_COMPILED_PATH']) || getenv('VERCEL')) {
     $app->useStoragePath('/tmp/storage');
     $app->useBootstrapPath('/tmp/storage/bootstrap');
-    URL::forceScheme('https');
 }
 
 return $app;
