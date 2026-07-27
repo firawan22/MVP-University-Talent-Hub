@@ -23,6 +23,7 @@ try {
     putenv('LOG_CHANNEL=stderr');
     putenv('APP_DEBUG=true');
     putenv('APP_KEY=base64:wQcNO5snKm8givcJU8BtcRBaF0akrfjNzezdQ3ax6MA=');
+    putenv('HTTPS=on');
 
     $_ENV['VIEW_COMPILED_PATH'] = $storagePath . '/framework/views';
     $_ENV['SESSION_DRIVER'] = 'cookie';
@@ -30,6 +31,7 @@ try {
     $_ENV['LOG_CHANNEL'] = 'stderr';
     $_ENV['APP_DEBUG'] = 'true';
     $_ENV['APP_KEY'] = 'base64:wQcNO5snKm8givcJU8BtcRBaF0akrfjNzezdQ3ax6MA=';
+    $_ENV['HTTPS'] = 'on';
 
     $_SERVER['VIEW_COMPILED_PATH'] = $storagePath . '/framework/views';
     $_SERVER['SESSION_DRIVER'] = 'cookie';
@@ -37,6 +39,8 @@ try {
     $_SERVER['LOG_CHANNEL'] = 'stderr';
     $_SERVER['APP_DEBUG'] = 'true';
     $_SERVER['APP_KEY'] = 'base64:wQcNO5snKm8givcJU8BtcRBaF0akrfjNzezdQ3ax6MA=';
+    $_SERVER['HTTPS'] = 'on';
+    $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
 
     // Bridge Vercel serverless request to Laravel's public/index.php
     require __DIR__ . '/../public/index.php';
