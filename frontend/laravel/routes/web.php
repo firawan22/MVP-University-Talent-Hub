@@ -21,10 +21,12 @@ Route::post('/login', function (Request $request) {
             return redirect('/dashboard');
         }
 
-        $errorMsg = $response->json()['message'] ?? $response->json()['error'] ?? 'Invalid credentials.';
+        $json = $response->json();
+        $errorMsg = is_array($json['message'] ?? null) ? implode(', ', $json['message']) : ($json['message'] ?? $json['error'] ?? 'Invalid credentials.');
         return back()->withErrors(['login' => $errorMsg])->withInput();
     } catch (\Throwable $e) {
-        return back()->withErrors(['login' => 'Backend API server (http://localhost:3001) is unreachable. Please ensure NestJS and MySQL are running.'])->withInput();
+        $apiHost = config('services.api_base_url');
+        return back()->withErrors(['login' => "Backend API server ($apiHost) is unreachable. Please ensure NestJS backend is running."])->withInput();
     }
 })->name('login.submit');
 
@@ -46,10 +48,12 @@ Route::post('/register', function (Request $request) {
             return redirect('/dashboard');
         }
 
-        $errorMsg = $response->json()['message'] ?? $response->json()['error'] ?? 'Registration failed.';
+        $json = $response->json();
+        $errorMsg = is_array($json['message'] ?? null) ? implode(', ', $json['message']) : ($json['message'] ?? $json['error'] ?? 'Registration failed.');
         return back()->withErrors(['register' => $errorMsg])->withInput();
     } catch (\Throwable $e) {
-        return back()->withErrors(['register' => 'Backend API server (http://localhost:3001) is unreachable. Please ensure NestJS and MySQL are running.'])->withInput();
+        $apiHost = config('services.api_base_url');
+        return back()->withErrors(['register' => "Backend API server ($apiHost) is unreachable. Please ensure NestJS backend is running."])->withInput();
     }
 })->name('register.submit');
 
